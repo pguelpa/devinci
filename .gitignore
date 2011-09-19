@@ -1,6 +1,4 @@
-# rcov generated
-coverage
-
-# bundler
 .bundle
+coverage
 Gemfile.lock
+pkg

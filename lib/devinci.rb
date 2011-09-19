@@ -1,3 +1,4 @@
+require 'libxml'
 require 'nokogiri'
 
 require 'devinci/base'
