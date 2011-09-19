@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stations>
+  <station>
+    <id>1</id>
+    <name>Notre Dame / Place Jacques Cartier</name>
+    <terminalName>6001</terminalName>
+    <lat>45.508183</lat>
+    <long>-73.554094</long>
+    <installed>true</installed>
+    <locked>false</locked>
+    <installDate/>
+    <removalDate/>
+    <temporary>false</temporary>
+    <nbBikes>13</nbBikes>
+    <nbEmptyDocks>17</nbEmptyDocks>
+  </station>
+</stations>

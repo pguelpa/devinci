@@ -1,3 +1,4 @@
-module Devinci
-  # Your code goes here...
-end
+require 'nokogiri'
+
+require 'devinci/base'
+require 'devinci/bixi'
