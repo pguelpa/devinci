@@ -1,4 +1,5 @@
 .bundle
+.rvmrc
 coverage
 Gemfile.lock
 pkg
