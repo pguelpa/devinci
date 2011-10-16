@@ -2,6 +2,29 @@ module Devinci
   class Bixi < Base
     attr_reader :document
 
+    FUNS = {
+      :content => lambda { |c| c.content },
+      :to_f => lambda { |c| c.content.to_f },
+      :to_i => lambda { |c| c.content.to_i },
+      :boolean => lambda { |c| c.content == 'true' },
+      :time => lambda { |c| c.content.empty? ? nil : Time.at(c.content.to_i / 1000) }
+    }
+
+    KEY_TYPES = {
+      'id' => [:id, :content],
+      'name' => [:name, :content],
+      'terminalName' => [:terminal_name, :content],
+      'lat' => [:latitude, :to_f],
+      'long' => [:longitude, :to_f],
+      'installed' => [:installed, :boolean],
+      'locked' => [:locked, :boolean],
+      'installDate' => [:installed_on, :time],
+      'removalDate' => [:removed_on, :time],
+      'temporary' => [:temporary, :boolean],
+      'nbBikes' => [:bikes, :to_i],
+      'nbEmptyDocks' => [:empty_docks, :to_i]
+    }
+
     def parse
       @document = Nokogiri::XML(io)
 
@@ -15,38 +38,14 @@ module Devinci
     end
 
     private
-      def parse_station(node)
-        station = {}
-        node.children.each do |c|
-          case c.name
-          when 'id'
-            station[:id] = c.content
-          when 'name'
-            station[:name] = c.content
-          when 'terminalName'
-            station[:terminal_name] = c.content
-          when 'lat'
-            station[:latitude] = c.content.to_f
-          when 'long'
-            station[:longitude] = c.content.to_f
-          when 'installed'
-            station[:installed] = (c.content == 'true')
-          when 'locked'
-            station[:locked] = (c.content == 'true')
-          when 'installDate'
-            station[:installed_on] = c.content.empty? ? nil : Time.at(c.content.to_i / 1000)
-          when 'removalDate'
-            station[:removed_on] = c.content.empty? ? nil : Time.at(c.content.to_i / 1000)
-          when 'temporary'
-            station[:temporary] = (c.content == 'true')
-          when 'nbBikes'
-            station[:bikes] = c.content.to_i
-          when 'nbEmptyDocks'
-            station[:empty_docks] = c.content.to_i
-          end
-        end
 
-        station
+    def parse_station(node)
+      node.children.inject({}) do |acc, child|
+        key, type = KEY_TYPES[child.name]
+
+        acc[key] = FUNS[type][child] if key
+        acc
       end
+    end
   end
 end
